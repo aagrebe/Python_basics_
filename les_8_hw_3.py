@@ -9,7 +9,9 @@ while True:
         el = input('Введите число для списка: ')
         if el == 'q':
             break
-        elif el.isnumeric() is False:
+        try:
+            float(el)
+        except ValueError:
             raise Typecheck('Тип ввода должен быть числом!')
     except Typecheck as err:
         print(err)
