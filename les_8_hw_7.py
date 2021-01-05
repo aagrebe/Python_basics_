@@ -9,9 +9,7 @@ class Complex_numbers:
         return self.number * other.number
 
 
-number_1 = complex(3, 2)
-a = Complex_numbers(number_1)
-number_2 = complex(4, 5)
-b = Complex_numbers(number_2)
-print(f'Результат сложения космлексных чисел {number_1} и {number_2} - {a+b}')
-print(f'Результат умножения космлексных чисел {number_1} и {number_2} - {a*b}')
+number_1 = Complex_numbers(complex(3, 2))
+number_2 = Complex_numbers(complex(4, 5))
+print(f'Результат сложения комлексных чисел {number_1.number} и {number_2.number} - {number_1+number_2}')
+print(f'Результат умножения комлексных чисел {number_1.number} и {number_2.number} - {number_1*number_2}')
