@@ -1,56 +1,70 @@
-class Office_equipment(): #оргтехника
-
+class Office_equipment:  # оргтехника
     technic_counter = 0
     technic_dict = {}
-    locations_of_company = set()
 
     def __init__(self, name, number, price, location):
         self.name = name
         self.number = number
         self.price = price
         self.location = location
-        self.paper = True
         Office_equipment.technic_counter += 1
         Office_equipment.technic_dict[name] = [number, price]
-        Office_equipment.locations_of_company.add(location)
 
-class Warehouse: #склад
-    def __init__(self):
-        self.items = []
-        self.analytics = {'names': [],
-                          'amount': [],
-                          'money': 0}
+    @classmethod
+    def check_data(cls, technic):
+        try:
+            if str(technic.name) and int(technic.number) and int(technic.price) and str(technic.location):
+                print('Данные введены верно')
+        except ValueError:
+            print('Данные введены неверно')
 
-    def add_item(self, name, number, price):
+
+class Warehouse:  # склад
+    items = []
+    analytics = {'names': [],
+                 'amount': [],
+                 'money': 0}
+    locations_of_company = set()
+
+    def add_item(self, name, number, price, location):
         el = {'наименование': name,
               'количество': number,
               'стоимость': price}
 
-        self.items.append(el)
-        self.analytics['names'].append(name)
-        self.analytics['amount'].append(number)
-        self.analytics['money'] += price
-
-    def __str__(self):
-        return f'{self.items}' \
-               f'{self.analytics}'
-
-class Printer(Office_equipment, Warehouse): #принтер
-    pass
-
-class Scanner(Office_equipment): #сканнер
-    pass
-
-class Copier(Office_equipment): #ксерокс
-
-    pass
+        Warehouse.items.append(el)
+        Warehouse.analytics['names'].append(name)
+        Warehouse.analytics['amount'].append(number)
+        Warehouse.analytics['money'] += price
+        Warehouse.locations_of_company.add(location)
 
 
-p = Printer('принтер', 5, 2000, 'корридор')
-s = Scanner('сканер', 3, 5000, 'офис')
-с = Copier('ксерокс', 4, 3000, 'ресепшн')
+class Printer(Office_equipment, Warehouse):
+    def __init__(self, name, number, price, location):
+        super().__init__(name, number, price, location)
+
+    def add_item(self, **kwargs):
+        super().add_item(self.name, self.number, self.price, self.location)
 
 
-print(Office_equipment.technic_counter)
-print(Office_equipment.technic_dict)
-print(Office_equipment.locations_of_company)
+class Scanner(Office_equipment, Warehouse):
+    def add_item(self, **kwargs):
+        super().add_item(self.name, self.number, self.price, self.location)
+
+
+class Copier(Office_equipment, Warehouse):
+    def add_item(self, **kwargs):
+        super().add_item(self.name, self.number, self.price, self.location)
+
+
+printer = Printer('принтер', 5, 2371, 'бухгалтерия')
+Office_equipment.check_data(printer)
+scan = Scanner('сканер', 3, 5155, 'отдел рекламы')
+copy = Copier('ксерокс', 4, 3610, 'отдел управления')
+printer.add_item()
+scan.add_item()
+copy.add_item()
+print(f'Всего единиц оргтехники: {Office_equipment.technic_counter}')
+print(f'Список оргтехники: {Office_equipment.technic_dict}')
+print(f'Технику нужно разместить в следующих отделах: {Warehouse.locations_of_company}')
+print(f'Информация о поступлениях: {Warehouse.items}')
+print(f'Общая аналитика по складу: {Warehouse.analytics}')
